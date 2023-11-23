@@ -33,7 +33,7 @@ The **Audio-to-Text Converter** is a Python application that allows users to tra
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/audio-to-text-converter.git
+    git clone https://github.com/satpalkumarofficial/Python-Mini-Project.git
     ```
 
 2. Install dependencies:
