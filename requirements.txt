@@ -1,0 +1,14 @@
+# GUI and File Dialog
+tkinter
+filedialog
+
+# Threading
+threading
+
+# Audio Processing
+speech_recognition
+pydub
+pydubplayback
+
+# Warnings
+warnings
