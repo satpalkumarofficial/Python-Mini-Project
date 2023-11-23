@@ -11,10 +11,9 @@ class AudioToTextConverter:
     def __init__(self, master):
         self.master = master
         master.title("Audio-to-Text Converter")
-        master.resizable(False, False)  # Make the window not resizable
+        master.resizable(False, False)
 
-        # Set the application icon
-        icon_path = "app_icon.ico"  # Replace with the path to your icon file
+        icon_path = "app_icon.ico"
         master.iconbitmap(default=icon_path)
 
         self.open_button = tk.Button(master, text="Open Audio File", command=self.open_file_dialog)
@@ -29,9 +28,9 @@ class AudioToTextConverter:
         self.play_pause_button = tk.Button(master, text="Play", command=self.play_pause_audio)
         self.play_pause_button.pack(pady=10)
 
-        self.audio = None  # Variable to store the loaded audio
-        self.playing = False  # Variable to track whether audio is currently playing
-        self.audio_thread = None  # Variable to store the audio playback thread
+        self.audio = None  
+        self.playing = False  
+        self.audio_thread = None  
 
     def play_pause_audio(self):
         if self.audio:
@@ -60,16 +59,13 @@ class AudioToTextConverter:
             filetypes=[("Audio Files", "*.wav;*.flac;*.mp3")],
         )
         if file_path:
-            # Display the file name in a label
             self.file_name_label.config(text=f"File Name: {os.path.basename(file_path)}")
 
-            # Add a processing event while transcribing
             self.result_text.config(state=tk.NORMAL)
             self.result_text.delete(1.0, tk.END)
             self.result_text.insert(tk.END, "Processing... Please wait.")
             self.result_text.config(state=tk.DISABLED)
 
-            # Use threading to avoid freezing the GUI during processing
             threading.Thread(target=self.process_file, args=(file_path,)).start()
 
     def process_file(self, file_path):
@@ -80,21 +76,18 @@ class AudioToTextConverter:
             self.result_text.insert(tk.END, transcribed_text)
             self.result_text.config(state=tk.DISABLED)
 
-            # Load the audio for playback
             self.audio = AudioSegment.from_file(file_path)
 
-            # Display the duration of the loaded audio
             duration_label_text = f"Duration: {self.get_audio_duration()} seconds"
             duration_label = tk.Label(self.master, text=duration_label_text)
             duration_label.pack(pady=5)
 
         except (sr.UnknownValueError, sr.RequestError, ValueError, wave.Error) as error:
-            # Handle the specific exceptions
             print(f"Error: {error}")
 
     def get_audio_duration(self):
         if self.audio:
-            return len(self.audio) / 1000  # Duration in seconds
+            return len(self.audio) / 1000 
         else:
             return 0
 
@@ -120,9 +113,7 @@ class AudioToTextConverter:
             print(f"Error playing audio: {e}")
 
 if __name__ == "__main__":
-    # Suppress the specific RuntimeWarning
     warnings.simplefilter("ignore", category=UserWarning)
-
     root = tk.Tk()
     app = AudioToTextConverter(root)
     root.mainloop()
