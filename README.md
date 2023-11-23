@@ -1,5 +1,5 @@
 # Python-Mini-Project
-Audio to Text converter
+Audio to Text converter by
 
 
 Satpal CUSB2302332010
