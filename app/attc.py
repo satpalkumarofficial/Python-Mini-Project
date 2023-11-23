@@ -25,7 +25,7 @@ class AudioToTextConverter:
         self.result_text = tk.Text(master, height=10, width=50, state=tk.DISABLED)
         self.result_text.pack(pady=10)
 
-        self.play_pause_button = tk.Button(master, text="Play", command=self.play_pause_audio)
+        self.play_pause_button = tk.Button(master, text="Play Audio", command=self.play_pause_audio)
         self.play_pause_button.pack(pady=10)
 
         self.audio = None  
