@@ -4,12 +4,15 @@ import threading
 import speech_recognition as sr
 from pydub import AudioSegment
 import pydub.playback
+from pydub import AudioSegment
 import warnings
+import wave
 import os
 
 class AudioToTextConverter:
-    def __init__(self, master):
+    def __init__(self, master, ttext):
         self.master = master
+        self.ttext = ttext
         master.title("Audio-to-Text Converter")
         master.resizable(False, False)
 
@@ -27,10 +30,14 @@ class AudioToTextConverter:
 
         self.play_pause_button = tk.Button(master, text="Play Audio", command=self.play_pause_audio)
         self.play_pause_button.pack(pady=10)
+        
+        self.save_button = tk.Button(master, text="Save Text", command=self.save_transcription_to_file)
+        self.save_button.pack(pady=10)
 
         self.audio = None  
         self.playing = False  
         self.audio_thread = None  
+        self.ttext = ""
 
     def play_pause_audio(self):
         if self.audio:
@@ -44,9 +51,9 @@ class AudioToTextConverter:
 
         with sr.AudioFile(audio_file_path) as source:
             audio_data = recognizer.record(source)
-
         try:
             transcribed_text = recognizer.recognize_google(audio_data)
+            self.ttext = transcribed_text
             return transcribed_text
         except sr.UnknownValueError:
             return "Speech Recognition could not understand audio"
@@ -85,6 +92,8 @@ class AudioToTextConverter:
         except (sr.UnknownValueError, sr.RequestError, ValueError, wave.Error) as error:
             print(f"Error: {error}")
 
+        return transcribed_text
+
     def get_audio_duration(self):
         if self.audio:
             return len(self.audio) / 1000 
@@ -112,8 +121,21 @@ class AudioToTextConverter:
         except pydub.playback.PlaybackError as e:
             print(f"Error playing audio: {e}")
 
+    def save_transcription_to_file(self):
+        output_file_path = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[("Text Files", "*.txt")],
+            title="Save Transcription",
+        )
+
+        if output_file_path:
+            with open(output_file_path, "w", encoding="utf-8") as file:
+                file.write(self.ttext)
+            print(f"Transcription saved to '{output_file_path}'")
+
 if __name__ == "__main__":
     warnings.simplefilter("ignore", category=UserWarning)
     root = tk.Tk()
-    app = AudioToTextConverter(root)
+    app = AudioToTextConverter(root, ttext="")
     root.mainloop()
+
